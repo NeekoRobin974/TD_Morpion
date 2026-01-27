@@ -12,6 +12,11 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     }
   ],
 })

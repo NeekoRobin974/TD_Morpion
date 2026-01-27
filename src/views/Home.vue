@@ -13,7 +13,7 @@
       </router-link>
 
       <router-link to="/profile" class="menu-item">
-        <h2>Editer le profil</h2>
+        <h2>Mon profil</h2>
         <p>Editer le profil</p>
       </router-link>
     </nav>
