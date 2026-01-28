@@ -27,7 +27,7 @@
       </div>
 
       <div class="turn-indicator" v-if="game.state===1">
-        <span v-if="game.next_player_id === game.owner.id" class="your-turn">
+        <span v-if="game.next_player_id === this.userId" class="your-turn">
           A vous de jouer!
         </span>
         <span v-else class="opponent-turn">
