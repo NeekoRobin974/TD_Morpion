@@ -40,6 +40,7 @@
           v-for="(cell, index) in board"
           :key="index"
           class="cell"
+          @click="play(index)"
         >
           {{ cell }}
         </div>
@@ -55,7 +56,8 @@ export default {
   data(){
     return{
       game: null,
-      ws: null
+      ws: null,
+      userId: null
     }
   },
   computed: {
@@ -88,14 +90,14 @@ export default {
       instance.get('/api/profile')
         .then(response =>{
           this.ws = new WebSocket(moveWsURL);
-          const userId = response.data.id;
+          this.userId = response.data.id;
           console.log(this.ws)
           this.ws.onopen = () => {
             console.log('WebSocket connecté')
             this.ws.send(JSON.stringify({
               action: 'connect',
               game_id: this.game.id,
-              player_id: userId
+              player_id: this.userId
             }))
           }
           this.ws.onmessage = (event) => {
@@ -122,6 +124,23 @@ export default {
         .catch(error =>{
           console.log('erreur de recuperation du profil');
       })
+    },
+    play(index){
+      if(this.game.next_player_id !== this.userId){
+        console.log('Ce n\'est pas votre tour!');
+        return;
+      }
+      if (this.board[index]) return
+      let row = Math.floor(index / 3) + 1
+      let col = (index % 3) + 1
+      instance.patch(`/api/games/${game.id}/play/${row}/${col}`)
+        .then(response => {
+          console.log('Coup joué:', row, col)
+          this.game = reponse.data
+        })
+        .catch(error => {
+          console;error('Erreur lors du coup:', error)
+        })
     }
 }
 }
