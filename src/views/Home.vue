@@ -7,7 +7,7 @@
         <p>Créer une nouvelle partie de morpion</p>
       </div>
 
-      <router-link to="/join-game" class="menu-item">
+      <router-link to="/join" class="menu-item">
         <h2>Rejoindre une Partie</h2>
         <p>Rejoindre une partie existante</p>
       </router-link>
