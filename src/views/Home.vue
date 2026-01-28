@@ -2,10 +2,10 @@
   <div class="home">
     <h1>Morpion - Menu Principal</h1>
     <nav class="menu">
-      <router-link to="/new-game" class="menu-item">
+      <div v-on:click="createGame" class="menu-item">
         <h2>Nouvelle Partie</h2>
         <p>Créer une nouvelle partie de morpion</p>
-      </router-link>
+      </div>
 
       <router-link to="/join-game" class="menu-item">
         <h2>Rejoindre une Partie</h2>
@@ -21,6 +21,19 @@
 </template>
 
 <script setup lang="ts">
+import instance from '@/api/index.js'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+async function createGame() {
+  try{
+    const response = await instance.post('/api/games')
+    let gameId = response.data.id
+    router.push({ name: 'game', params: { id: gameId } })
+  }
+  catch(error){
+    console.error('erreur lors de la creation de la game: ' + error)
+  }
+}
 </script>
 
 <style scoped>
