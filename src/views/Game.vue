@@ -52,6 +52,12 @@
           <button @click="$router.push('/')" class="home-btn">Retour</button>
         </div>
       </div>
+      <div v-if="game.state===2 && game.winner==null" class="draw-overlay">
+        <div class="draw-message">
+          <h2>Aucun joueur n'a gagné...</h2>
+          <button @click="$router.push('/')" class="home-btn">Retour</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -317,7 +323,7 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.winner-overlay {
+.winner-overlay, .draw-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -336,7 +342,7 @@ export default {
   to { opacity: 1; }
 }
 
-.winner-message {
+.winner-message, .draw-message {
   background: white;
   padding: 40px;
   border-radius: 16px;
@@ -344,13 +350,13 @@ export default {
   text-align: center;
 }
 
-.winner-message h2 {
+.winner-message h2, .draw-message h2 {
   margin: 0 0 30px 0;
   font-size: 28px;
   color: #2c3e50;
 }
 
-.winner-message .home-btn {
+.winner-message .home-btn, .draw-message .home-btn{
   background-color: #fff;
   border: 2px solid #42b883;
   color: #42b883;
@@ -362,7 +368,7 @@ export default {
   transition: all 0.3s;
 }
 
-.winner-message .home-btn:hover {
+.winner-message .home-btn:hover, .draw-message .home-btn:hover{
   background-color: #42b883;
   color: white;
   transform: translateY(-2px);
