@@ -8,11 +8,7 @@
       </router-link>
     </nav>
 
-    <div v-if="errors.length" class="errors">
-      <ul>
-        <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
-      </ul>
-    </div>
+    <Error :errors="errors" />
 
     <form @submit.prevent="joinGame">
       <div>
@@ -26,9 +22,13 @@
 
 <script>
 import api from '@/api/index.js'
+import Error from '@/components/Error.vue'
 
 export default {
   name: 'JoinGame',
+  components: {
+    Error
+  },
   data() {
     return {
       errors: [],
@@ -138,19 +138,5 @@ button[type="submit"]:hover {
 
 button[type="submit"]:active {
   transform: translateY(0);
-}
-
-.errors {
-  background-color: #ffebee;
-  color: #c62828;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #ffcdd2;
-}
-
-.errors ul {
-  margin: 0;
-  padding-left: 1.5rem;
 }
 </style>
