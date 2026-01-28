@@ -106,15 +106,15 @@ export default {
             switch(data.action){
               case 'opponent-join':
                console.log('Un adversaire a rejoint la partie')
-               this.game = data.game
+               this.refreshPartie()
                 break
               case 'opponent-play':
                 console.log('L\'adversaire a joué')
-                this.game = data.game
+                this.refreshPartie()
                 break
               case 'opponent-quit':
                 console.log('L\'adversaire a quitté')
-                  this.game = data.game
+                  this.refreshPartie()
                 break
               default:
                 console.log(data.action)
@@ -125,6 +125,17 @@ export default {
           console.log('erreur de recuperation du profil');
       })
     },
+    refreshPartie(){
+      instance.get(`/api/games/${this.game.id}`)
+        .then(response => {
+          console.log('Partie récupérée:', response.data)
+          this.game=response.data
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération de la partie : ', error.response?.status)
+          next(false)
+        })
+    },
     play(index){
       if(this.game.next_player_id !== this.userId){
         console.log('Ce n\'est pas votre tour!');
@@ -133,10 +144,10 @@ export default {
       if (this.board[index]) return
       let row = Math.floor(index / 3) + 1
       let col = (index % 3) + 1
-      instance.patch(`/api/games/${game.id}/play/${row}/${col}`)
+      instance.patch(`/api/games/${this.game.id}/play/${row}/${col}`)
         .then(response => {
           console.log('Coup joué:', row, col)
-          this.game = reponse.data
+          this.game = response.data
         })
         .catch(error => {
           console;error('Erreur lors du coup:', error)
