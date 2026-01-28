@@ -46,7 +46,6 @@ export default {
   },
   //Hook de navigation appelé avant que la route ne soit confirmée
   beforeRouteEnter(to, from, next) {
-    // On utilise simplement l'instance api qui contient déjà la Clé API dans ses headers
     api.get('/api/profile')
       .then(response => {
         next(vm => {
