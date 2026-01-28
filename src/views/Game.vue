@@ -16,12 +16,12 @@
     <div v-else class="game-section">
       <div class="players">
         <div class="player">
-          <span class="label">Vous</span>
+          <span class="label">J1</span>
           <span class="name">{{ game.owner?.name }}</span>
         </div>
         <div class="vs">VS</div>
         <div class="player">
-          <span class="label">Adversaire</span>
+          <span class="label">J2</span>
           <span class="name">{{ game.opponent.name }}</span>
         </div>
       </div>
