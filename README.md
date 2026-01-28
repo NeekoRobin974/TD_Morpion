@@ -1,6 +1,10 @@
 # TD_Morpion
 
-This template should help get you started developing with Vue 3 in Vite.
+CADET Mattéo
+
+DIEUDONNE Quentin
+
+Projet Morpion réalisé en Dev Web Client Avancé.
 
 ## Recommended IDE Setup
 

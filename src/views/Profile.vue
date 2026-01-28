@@ -8,11 +8,8 @@
       </router-link>
     </nav>
 
-    <div v-if="errors.length" class="errors">
-      <ul>
-        <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
-      </ul>
-    </div>
+    <Error :errors="errors" />
+
     <form v-if="user" @submit.prevent="saveProfile">
       <div>
         <label for="name">Nom : </label>
@@ -34,9 +31,13 @@
 
 <script>
 import api from '@/api/index.js'
+import Error from '@/components/Error.vue'
 
 export default {
   name: 'UserProfile',
+  components: {
+    Error
+  },
   data() {
     return {
       user: null,
@@ -45,7 +46,6 @@ export default {
   },
   //Hook de navigation appelé avant que la route ne soit confirmée
   beforeRouteEnter(to, from, next) {
-    // On utilise simplement l'instance api qui contient déjà la Clé API dans ses headers
     api.get('/api/profile')
       .then(response => {
         next(vm => {
@@ -172,20 +172,6 @@ button[type="submit"]:hover {
 
 button[type="submit"]:active {
   transform: translateY(0);
-}
-
-.errors {
-  background-color: #ffebee;
-  color: #c62828;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #ffcdd2;
-}
-
-.errors ul {
-  margin: 0;
-  padding-left: 1.5rem;
 }
 
 /* Chargement */
