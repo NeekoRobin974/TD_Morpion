@@ -13,7 +13,7 @@
       <p class="code-share">Partagez ce code : <strong>{{ game.code }}</strong></p>
     </div>
 
-    <div v-else class="game-section">
+    <div v-else-if="game.state===1 || game.state===2" class="game-section">
       <div class="players">
         <div class="player">
           <span class="label">J1</span>
@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="turn-indicator">
+      <div class="turn-indicator" v-if="game.state===1">
         <span v-if="game.next_player_id === game.owner.id" class="your-turn">
           A vous de jouer!
         </span>
@@ -37,17 +37,25 @@
 
       <div class="grid">
         <div
-          v-for="(cell, index) in board"
+          v-for="(symbol, index) in symbols"
           :key="index"
           class="cell"
           @click="play(index)"
         >
-          {{ cell }}
+          {{ symbol }}
+        </div>
+      </div>
+
+      <div v-if="game.state===2 && game.winner!==null" class="winner-overlay">
+        <div class="winner-message">
+          <h2>{{ game.winner.name }} a gagné !</h2>
+          <button @click="$router.push('/')" class="home-btn">Retour</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import instance, { moveWsURL } from '@/api/index.js'
@@ -68,6 +76,13 @@ export default {
         this.game.r2c1, this.game.r2c2, this.game.r2c3,
         this.game.r3c1, this.game.r3c2, this.game.r3c3
       ]
+    },
+    symbols() {
+      return this.board.map(cell => {
+        if (cell === 1) return 'X'
+        if (cell === 2) return 'O'
+        return ''
+      })
     }
   },
   beforeRouteEnter(to,from,next){
@@ -84,6 +99,12 @@ export default {
         console.error('Erreur lors de la récupération de la partie : ', error.response?.status)
         next(false)
       })
+  },
+  beforeUnmount() {
+    if (this.ws){
+      this.ws.close()
+      console.log('WebSocket déconnecté')
+    }
   },
   methods: {
     waitForOpponentMove() {
@@ -287,5 +308,63 @@ export default {
 .cell:hover {
   background: #e9ecef;
   transform: scale(1.05);
+}
+.game-section {
+  position: relative;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.winner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.winner-message {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.winner-message h2 {
+  margin: 0 0 30px 0;
+  font-size: 28px;
+  color: #2c3e50;
+}
+
+.winner-message .home-btn {
+  background-color: #fff;
+  border: 2px solid #42b883;
+  color: #42b883;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.winner-message .home-btn:hover {
+  background-color: #42b883;
+  color: white;
+  transform: translateY(-2px);
 }
 </style>
